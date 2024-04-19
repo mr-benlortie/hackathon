@@ -1,0 +1,67 @@
+---
+title: "IBM Hackathon"
+author: "Edward DeWane, Brett Lobsinger, Ben Lortie"
+date: "2024-04-19"
+output: html_document
+---
+
+The Fischermen
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Step 1
+```{r}
+
+#return is a list of returns for the years since t
+#this allows the function to work if you have data for more than 1 year
+
+year2return <- 0.06*100000000
+return <- as.data.frame(c(0,year2return))
+roi <- function(t,N,alpha,investment,return){
+  j <- t:N+t
+  sum(((1-alpha)^(j-t)*return[j,1]-investment)/(investment))
+}
+#for 1 year, with a cost of capital of 0.1, and an investment of 1 million dollars and an economic return of 6 million, you get the following ROI
+roi(1,1,0.1,1000000,return)
+```
+Step 2
+```{r}
+#similar to step 1, we will make a dataframe for intangible returns for each year
+
+year2intang <- 500000
+intang <- as.data.frame(c(0,year2intang))
+
+roi_intang <- function(t,N,alpha,investment,return,intang){
+  j <- t:t+N
+  sum(((1-alpha)^(j-t)*(return[j,1]+intang[j,1])-investment))/(investment)
+}
+#for 1 year, with a cost of capital of 0.1, and an investment of 1 million dollars and an economic return of 6 million and intangible return of 500,000, you get the following ROI
+roi_intang(1,1,0.1,1000000,return,intang)
+```
+Step 3
+```{r}
+#similar to step 2, we will make a dataframe for option returns for each year
+#to calculate them, you would need m gamma values for each option, but we do not have that for this example
+#for this we are using m of 1 because we only have 1 option
+#if you have multiple options or years, you can store them in the optionreturn dataframe where each column is an option and each row is a year
+
+optionreturn <- as.data.frame((500000),nrow=1)
+
+holistic_roi <- function(t,N,alpha,investment,return,intang,m,investment2, optionreturn){
+  j <- t:t+N
+  k <- 1:m
+  (sum(((1-alpha)^(j-t)*(return[j,1]+intang[j,1])))+sum((1-alpha)^(j-t)*(sum(optionreturn[k,t])))-(investment+investment2))/(investment+investment2)
+}
+
+
+#for 1 year, with a cost of capital of 0.1, and an investment of 1 million dollars and an economic return of 6 million, intangible return of 500,000, saving of 500,000, investment of 300,000, and only 1 option you get the following ROI
+
+holistic_roi(1,1,0.1,1000000,return,intang,1,300000,optionreturn)
+```
+
+
+
+
