@@ -5,10 +5,6 @@ econ <- c(0, 0.06 * 100000000) # economic return
 n <- 2 # years
 alpha <- 0.10 # cost of capital
 
-rate <- 0.06
-rev <- 100000000
-
-
 ROI_fun <- function(i, econ, n, alpha) {
   sigma <- sum((1 - alpha)^(0:(n - 1)) * econ)
   roi <- (sigma - i) / i
