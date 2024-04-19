@@ -1,0 +1,34 @@
+# step 1
+
+i <- 1000000 # initial investment
+econ <- c(0, 0.06 * 100000000) # economic return
+n <- 2 # years
+alpha <- 0.10 # cost of capital
+
+rate <- 0.06
+rev <- 100000000
+
+
+ROI_fun <- function(i, econ, n, alpha) {
+  sigma <- sum((1 - alpha)^(0:(n - 1)) * econ)
+  roi <- (sigma - i) / i
+  return(roi)
+}
+
+step1 <- ROI_fun(i, econ, n, alpha)
+print(step1)
+
+# step 2
+
+i <- 1000000 # initial investment
+econ <- c(0, 5400000) # economic return
+intang <- c(0, 450000) # intangible return
+alpha <- c(0, 1) # years
+
+ROI_fun <- function(alpha, econ, intang, i) {
+  ROI <- ((sum(alpha * (econ + intang)) - i) / i) * 100
+  return(ROI)
+}
+
+step2 <- ROI_fun(alpha, econ, intang, i)
+print(step2)
